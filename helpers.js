@@ -92,6 +92,18 @@ module.exports = {
     return result
   },
 
+
+  // ## all categories filter
+  // category
+  // category/title
+  // category/nicename
+  // category/domain
+
+  // ## specific category filter
+  // category/<category_domain>
+  // category/<category_domain>/title
+  // category/<category_domain>/nicename
+  // category/<category_domain>/domain
   get_category_value_from_key(item, key) {
     if (!key || !item) return null
     let result = []
@@ -105,18 +117,6 @@ module.exports = {
       key = key.split("/")
       key.shift()
     }
-
-    // ## all
-    // category
-    // category/title
-    // category/nicename
-    // category/domain
-
-    // ## specific
-    // category/carat
-    // category/carat/title
-    // category/carat/nicename
-    // category/carat/domain
     
     if (Array.isArray(item)) {
       item.forEach(category => {

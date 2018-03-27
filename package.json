@@ -1,14 +1,15 @@
 {
-  "name": "export",
-  "version": "1.0.0",
-  "description": "",
+  "name": "wp-xml-reader",
+  "version": "0.0.1",
+  "description": "WP XML Reader",
+  "author": "Bertrand Souriau",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "chalk": "^2.3.2",
     "when": "^3.7.8",

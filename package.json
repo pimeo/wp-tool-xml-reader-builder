@@ -1,0 +1,17 @@
+{
+  "name": "export",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.3.2",
+    "when": "^3.7.8",
+    "xml2js": "^0.4.19"
+  }
+}

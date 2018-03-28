@@ -11,10 +11,27 @@ module.exports = {
     "category"
   ],
 
-  string_value_from_array_if_possible(arr) {
-    return Array.isArray(arr) && arr.length == 1 && typeof arr[0] === "string"
+  filters: [
+    { snippet: 'unserialize', method: 'unserialize_php' }
+  ],
+
+  string_value_from_array_if_possible( arr, filter = null ) {
+    let value = Array.isArray(arr) && arr.length == 1 && typeof arr[0] === "string"
       ? arr[0]
       : arr
+
+    if( filter ) {
+      let action = this.filters.filter( f => f.snippet == filter )[0] || null
+      if( action ) {
+        value = this[action['method']]( value )
+      }
+    }
+    return value
+  },
+
+  unserialize_php( str ) {
+    const php = require('./unserialize-php-js.js')
+    return php( str )
   },
 
   get_type_for_key(key) {
@@ -45,6 +62,14 @@ module.exports = {
       item = item["wp:postmeta"]
     }
 
+    // detect filter
+    let filter = null
+    if( key.indexOf('|') > -1 ) {
+      filter = key.split('|')[1]
+      // remove filter from key
+      key = key.split('|').shift()
+    }
+
     // detect if key has a namespace
     // and just retrieve the last item
     key = key.indexOf("/") > -1 ? key.split("/").pop() : key
@@ -54,13 +79,13 @@ module.exports = {
       // array of items
       item.forEach(postmeta => {
         if (postmeta["wp:meta_key"].indexOf(key) > -1) {
-          result = this.string_value_from_array_if_possible( postmeta["wp:meta_value"] )
+          result = this.string_value_from_array_if_possible( postmeta["wp:meta_value"], filter )
         }
       })
     } else {
       // item object
       if (item["wp:meta_key"].indexOf(key) > -1) {
-        result = this.string_value_from_array_if_possible( item["wp:meta_value"] )
+        result = this.string_value_from_array_if_possible( item["wp:meta_value"], filter )
       }
     }
     return result

@@ -10,7 +10,7 @@ let reader = new WPXMLReader(file)
 
 // 2. Queries
 let query_options = {
-  // row_index: 0,
+  row_index: 0,
   conditions: [
     // attribute condition #1 : search by attribute key id and atribute key value
     // {
@@ -64,10 +64,13 @@ let query_options = {
   ],
   // attribute : attribute mappings item or items if no conditions applied
   attributes: [
-    "title"
+    "title",
     //   "post_name",
     //   "status",
     //   "post_id",
+    // "meta_key/grid_images_per_design",
+    "meta_key/grid_images_per_design|unserialize",
+    // "meta_key/all_tagged_images_meta|unserialize",
     // "meta_key/_yoast_wpseo_metadesc",
     // "category/metal/nicename",
   ]
@@ -82,5 +85,6 @@ reader.query(query_options).then(response => {
   console.log(chalk.green(`*********`))
   console.log(chalk.green(`Response: (${response.length} items)`))
   console.log(chalk.green(`*********`), "\n")
-  console.log(JSON.stringify(response, null, 2), "\n")
+  console.log(response, "\n")
+  // console.log(JSON.stringify(response, null, 2), "\n")
 })

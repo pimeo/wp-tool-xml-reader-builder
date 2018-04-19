@@ -7,6 +7,10 @@
   "scripts": {
     "start": "node index.js",
     "build": "node build.js",
+
+    "reader:testimonial": "npm run start -- --post-type testimonial",
+    "builder:testimonial": "npm run build -- --post-type testimonial",
+
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "MIT",

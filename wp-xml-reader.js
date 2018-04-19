@@ -135,7 +135,7 @@ class WPXMLReader {
 
     // write response
     if (options.write_response_logs === true) {
-      this.write(response, options.response_logs_filename)
+      this.write(response, options.output_filename)
     }
 
     return response

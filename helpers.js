@@ -191,5 +191,5 @@ module.exports = {
   get_result_from_attribute_condition(item, condition) {
     let value = this.get_attribute_value_from_key(item, condition.name)
     return condition.value == value ? item : null
-  }
+  },
 }

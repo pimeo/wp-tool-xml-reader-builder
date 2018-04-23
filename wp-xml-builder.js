@@ -13,50 +13,87 @@ class WPXMLBuilder {
     this.contents = contents
   }
 
+  get_contents() {
+    return this.contents
+  }
+
+  get_items(channel_id = 0) {
+    if (!this.contents.rss.channel[channel_id]) {
+      return []
+    }
+    return this.contents.rss.channel[channel_id].item
+  }
+
+  /**
+   * ITEM ONLY
+   */
+
+  add_meta_key_for_item(item, key, value) {
+    item["wp:postmeta"].push({
+      "wp:meta_key": [key],
+      "wp:meta_value": [value]
+    })
+    return this
+  }
+
+  update_meta_key_for_item(item, key, value) {
+    item["wp:postmeta"].forEach(meta_key => {
+      if (meta_key["wp:meta_key"].indexOf(key) !== -1) {
+        meta_key["wp:meta_value"] = [value]
+      }
+    })
+    return this
+  }
+
+  replace_meta_key_for_item(item, key, search, replaced_value) {
+    item["wp:postmeta"].forEach(meta_key => {
+      if (meta_key["wp:meta_key"].indexOf(key) !== -1) {
+        let exp = new RegExp(search, "g")
+        let value = meta_key["wp:meta_value"][0].replace(exp, replaced_value)
+        meta_key["wp:meta_value"] = [value]
+      }
+    })
+    return this
+  }
+
+  remove_meta_key_for_item(item, key) {
+    item["wp:postmeta"].forEach((meta_key, meta_index) => {
+      if (meta_key["wp:meta_key"].indexOf(key) !== -1) {
+        item["wp:postmeta"].splice(meta_index, 1)
+      }
+    })
+  }
+
+  /**
+   * BULK OF ITEMS
+   */
+
   // meta key
   // { 'wp:meta_key': [ '_yoast_wpseo_linkdex' ], 'wp:meta_value': [ '85' ] }
   add_meta_key(key, value) {
     this.contents.rss.channel[0].item.forEach(item => {
-      item["wp:postmeta"].push({
-        "wp:meta_key": [key],
-        "wp:meta_value": [value]
-      })
+      this.add_meta_key_for_item(item, key, value)
     })
     return this
   }
 
   update_meta_key(key, value) {
     this.contents.rss.channel[0].item.forEach(item => {
-      item["wp:postmeta"].forEach(meta_key => {
-        if (meta_key["wp:meta_key"].indexOf(key) !== -1) {
-          meta_key["wp:meta_value"] = [value]
-        }
-      })
+      this.update_meta_key_for_item(item, key, value)
     })
     return this
   }
 
   replace_meta_key(key, search, replaced_value) {
     this.contents.rss.channel[0].item.forEach(item => {
-      item["wp:postmeta"].forEach(meta_key => {
-        if (meta_key["wp:meta_key"].indexOf(key) !== -1) {
-          let exp = new RegExp(search, "g")
-          let value = meta_key["wp:meta_value"][0].replace(exp, replaced_value)
-          meta_key["wp:meta_value"] = [value]
-        }
-      })
+      this.replace_meta_key_for_item(item, key, search, replaced_value)
     })
     return this
   }
 
-
   remove_meta_key(key) {
     this.contents.rss.channel[0].item.forEach(item => {
-      item["wp:postmeta"].forEach((meta_key, meta_index) => {
-        if (meta_key["wp:meta_key"].indexOf(key) !== -1) {
-          item["wp:postmeta"].splice(meta_index, 1)
-        }
-      })
+      this.remove_meta_key_for_item(item, key)
     })
     return this
   }
@@ -68,9 +105,9 @@ class WPXMLBuilder {
           // 1. store value
           let value = meta_key["wp:meta_value"][0]
           // 2. create new entry
-          this.add_meta_key(newKey, value)
+          this.add_meta_key_for_item(item, newKey, value)
           // 3. remove old key
-          this.remove_meta_key(oldKey)
+          this.remove_meta_key_for_item(item, oldKey)
         }
       })
     })
@@ -138,12 +175,12 @@ class WPXMLBuilder {
     this.contents.rss.channel[0].item.forEach(item => {
       if (item.hasOwnProperty(key)) {
         let exp = new RegExp(search, "g")
-        if( typeof item[key][0] === 'object' ) {
-          if( item[key][0].hasOwnProperty( '_' ) ) {
-            item[key][0]['_'] = item[key][0]['_'].replace(exp, replaced_value)
+        if (typeof item[key][0] === "object") {
+          if (item[key][0].hasOwnProperty("_")) {
+            item[key][0]["_"] = item[key][0]["_"].replace(exp, replaced_value)
           }
         } else {
-          item[key] = [ item[key][0].replace(exp, replaced_value) ]
+          item[key] = [item[key][0].replace(exp, replaced_value)]
         }
       }
     })

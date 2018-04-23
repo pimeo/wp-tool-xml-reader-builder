@@ -184,12 +184,29 @@ module.exports = {
   },
 
   get_result_from_category_condition(item, condition) {
+    // define operator
+    condition.operator = condition.operator ? condition.operator : "equalsTo"
+    // retrieve value of condition
     let value = this.get_category_value_from_key(item, condition.name)
+    
+    if( condition.operator == "notEqualsTo" ) {
+      return value.indexOf(condition.value) == -1 ? item : null  
+    }
+
+    // default operator "equalsTo" condition
     return value.indexOf(condition.value) > -1 ? item : null
   },
 
   get_result_from_attribute_condition(item, condition) {
+    // define operator
+    condition.operator = condition.operator ? condition.operator : "equalsTo"
+    // retrieve value of condition
     let value = this.get_attribute_value_from_key(item, condition.name)
+  
+    if( condition.operator == "notEqualsTo" ) {
+      return condition.value != value ? item : null
+    }
+    // default operator "equalsTo" condition
     return condition.value == value ? item : null
   },
 }

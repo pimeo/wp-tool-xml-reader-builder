@@ -35,6 +35,6 @@ reader.query(configuration.reader_query_options).then(response => {
   console.log(chalk.green(`*********`))
   console.log(chalk.green(`Response: (${response.length} items)`))
   console.log(chalk.green(`*********`), "\n")
-  console.log(response, "\n")
+  // console.log(response, "\n")
   console.log(JSON.stringify(response, null, 2), "\n")
 })

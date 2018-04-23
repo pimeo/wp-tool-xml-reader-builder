@@ -36,6 +36,20 @@ class WPXMLBuilder {
     return this
   }
 
+  replace_meta_key(key, search, replaced_value) {
+    this.contents.rss.channel[0].item.forEach(item => {
+      item["wp:postmeta"].forEach(meta_key => {
+        if (meta_key["wp:meta_key"].indexOf(key) !== -1) {
+          let exp = new RegExp(search, "g")
+          let value = meta_key["wp:meta_value"][0].replace(exp, replaced_value)
+          meta_key["wp:meta_value"] = [value]
+        }
+      })
+    })
+    return this
+  }
+
+
   remove_meta_key(key) {
     this.contents.rss.channel[0].item.forEach(item => {
       item["wp:postmeta"].forEach((meta_key, meta_index) => {
@@ -94,9 +108,9 @@ class WPXMLBuilder {
     return this
   }
 
-  update_acf_meta_key_key( oldKey, newKey ) {
+  update_acf_meta_key_key(oldKey, newKey) {
     // update value key
-    this.update_meta_key_key( oldKey, newKey )
+    this.update_meta_key_key(oldKey, newKey)
     // update field id key
     this.update_meta_key_key(`_${oldKey}`, `_${newKey}`)
     return this
@@ -106,7 +120,7 @@ class WPXMLBuilder {
   // 'wp:status': [ 'publish' ],
   add_attribute(key, value) {
     this.contents.rss.channel[0].item.forEach(item => {
-      item[key] = value
+      item[key] = [value]
     })
     return this
   }
@@ -114,7 +128,23 @@ class WPXMLBuilder {
   update_attribute(key, value) {
     this.contents.rss.channel[0].item.forEach(item => {
       if (item.hasOwnProperty(key)) {
-        item[key] = value
+        item[key] = [value]
+      }
+    })
+    return this
+  }
+
+  replace_attribute(key, search, replaced_value) {
+    this.contents.rss.channel[0].item.forEach(item => {
+      if (item.hasOwnProperty(key)) {
+        let exp = new RegExp(search, "g")
+        if( typeof item[key][0] === 'object' ) {
+          if( item[key][0].hasOwnProperty( '_' ) ) {
+            item[key][0]['_'] = item[key][0]['_'].replace(exp, replaced_value)
+          }
+        } else {
+          item[key] = [ item[key][0].replace(exp, replaced_value) ]
+        }
       }
     })
     return this

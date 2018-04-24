@@ -9,14 +9,20 @@ module.exports = {
   reader_query_options: {
     write_response_logs: true, // write logs in filename
     output_filename: "medias", // output logs filename
-    conditions: [
-      {
-        name: "post_parent",
-        value: 0,
-        operator: "notEqualsTo",
-        attributes: ["post_id", "meta_key/_wp_attached_file", "attachment_url", "post_parent"]
-      }
+    attributes: [
+      "post_id",
+      "meta_key/_wp_attached_file",
+      "attachment_url",
+      "post_parent"
     ]
+    // conditions: [
+    //   {
+    //     name: "post_parent",
+    //     value: 0,
+    //     operator: "notEqualsTo",
+    //     attributes: ["post_id", "meta_key/_wp_attached_file", "attachment_url", "post_parent"]
+    //   }
+    // ]
   },
 
   // [BUILDER] query options

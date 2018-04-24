@@ -6,8 +6,8 @@ const fsExt = require("fs-extra")
 const path = require("path")
 const when = require("when")
 
-const medias = require("./datas/output/medias.json")
-const testimonials = require("./datas/output/testimonials.json")
+const medias = require("./../datas/output/medias.json")
+const testimonials = require("./../datas/output/testimonials.json")
 
 let source_dir = path.join(
   "/Applications/MAMP/htdocs/old-jean-dousset/wp-content/uploads"

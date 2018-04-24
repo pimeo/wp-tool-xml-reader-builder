@@ -7,11 +7,23 @@
   "scripts": {
     "start": "node index.js",
     "build": "node build.js",
-    "copy:medias": "node copy-medias.js",
+
+    
     "reader:testimonial": "npm run start -- --post-type testimonial",
     "builder:testimonial": "npm run build -- --post-type testimonial",
+    "copy:medias:testimonial": "node copy-medias/testimonial.js",
+  
+    "reader:jewelry": "npm run start -- --post-type jewelry",
+    "builder:jewelry": "npm run build -- --post-type jewelry",
+    "copy:medias:jewelry": "node copy-medias/jewelry.js",
+
+    "reader:custom-ring": "npm run start -- --post-type custom-ring",
+    "builder:custom-ring": "npm run build -- --post-type custom-ring",
+    "copy:medias:custom-ring": "node copy-medias/custom-ring.js",
+
     "reader:media": "npm run start -- --post-type media",
     "builder:media": "npm run build -- --post-type media",
+    
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "MIT",

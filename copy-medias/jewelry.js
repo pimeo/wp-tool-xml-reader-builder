@@ -1,100 +1,69 @@
 #!/usr/bin/env node
 
 // external libs
-const fs = require("fs")
-const fsExt = require("fs-extra")
 const path = require("path")
 const when = require("when")
 
+// internal libs
+const helpers = require("./../utils/helpers-copy-medias")
+
+// datas
 const medias = require("./../datas/output/medias.json")
-const jewelries = require("./../datas/output/jewelries.json")
+const items = require("./../datas/output/jewelries.json")
 
-let source_dir = path.join(
-  "/Applications/MAMP/htdocs/old-jean-dousset/wp-content/uploads"
-)
-let output_dir = path.join("datas", "uploads", "jewelries-medias")
-let count_testimonails = 0
-let jewelries_ids = []
+// settings
+const options = {
+  source_dir: path.join(
+    "/Applications/MAMP/htdocs/old-jean-dousset/wp-content/uploads"
+  ),
+  output_dir: path.join("datas", "uploads", "jewelries-medias"),
+  count_items: 0
+}
 
-function copy_media(origin, media) {
+// hydrate helpers
+helpers.set_medias( medias )
+
+// promise details callback
+function copy_item_medias(origin, item) {
   return when.promise((resolve, reject) => {
-    let file_dir = media["meta_key/_wp_attached_file"]
-    let media_post_parent_id = media["post_parent"]
+    when
+      .all([
 
-    console.log( file_dir )
+        // copy from extracted post_types/<post_type>.json file
 
-    let original_path = path.join(source_dir, file_dir)
-    // let dest_path = path.join(process.cwd(), output_dir)
+        // helpers.copy_media_for_item(item, "custom_top_banner", options),
+        // helpers.copy_media_for_item(item, "left_image", options),
+        // helpers.copy_media_for_item(item, "bottom_image", options),
+        // helpers.copy_media_for_item(item, "right_image", options),
+        // helpers.copy_media_for_item(item, "right_image", options),
+        // helpers.copy_media_for_item(item, "grid_image_for_related", options),
+        // helpers.copy_media_for_item(item, "social_media_override", options),
+        // helpers.copy_media_for_item(item, "grid_images_0_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_1_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_2_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_3_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_4_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_5_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_6_image", options),
+        // helpers.copy_media_for_item(item, "_thumbnail_id", options),
 
-    if (!fs.existsSync(original_path)) {
-      console.log("doesnt exists", original_path)
-      return resolve()
-    } else {
-      // link jewelries with medias uploads
-      let found =
-        jewelries.filter(t => {
-          return t.post_id == media_post_parent_id
-        })[0] || null
-
-      if (found) {
-        console.log("FOUND for", found["post_name"])
-      } else {
-        console.log(" NOT FOUND for", found["post_name"])
-      }
-
-        // if( jewelries_ids.indexOf( parseInt(found["post_id"]) ) == -1 ) {
-        //   jewelries_ids.push( parseInt( found["post_id"] ) )
-        //   count_testimonails++
-        // } else {
-        //   console.log('DOUBLON for ', found["post_name"])
-        // }
-
-      //   let output_filename = path.parse(file_dir).base
-
-      //   // ensure that dir exists
-      //   let dest_path = path.join(
-      //     process.cwd(),
-      //     output_dir,
-      //     found["post_name"],
-      //     output_filename
-      //   )
-      //   // console.log(dest_path)
-      //   let dest_dir = path.parse(dest_path).dir
-      //   fsExt.ensureDirSync(dest_dir)
-
-      //   fsExt.copy(original_path, dest_path, err => {
-      //     if (err) {
-      //       return reject(err)
-      //     }
-      //     console.log("- COPIED ", file_dir)
-      //     resolve()
-      //   })
-      // } else {
-        // resolve()
-      // }
-
-      resolve()
-      // // ensure that dir exists
-      // let dest_dir = path.parse( dest_path ).dir
-      // fsExt.ensureDirSync(dest_dir)
-      // console.log( "- COPY ", file_dir  )
-      // // copy file
-      // fsExt.copy(original_path, dest_path, err => {
-      //   if (err) {
-      //     return reject(err)
-      //   }
-      //   console.log("- COPIED ", file_dir)
-      //   resolve()
-      // })
-    }
+        // copy from http://oldjeandousset.local/debug?post={$item->ID}
+        
+        // helpers.copy_media_from_attached_post_item( item, options )
+      ])
+      .then(() => {
+        options.count_items++
+        resolve()
+      })
+      .catch(reject)
   })
 }
 
-// promises
+// promise maion process
 when
-  .reduce(medias, copy_media, [])
+  .reduce(items, copy_item_medias, [])
   .then(() => {
-    console.log("done", count_testimonails)
+    console.log("done", options.count_items)
   })
   .catch(err => {
     console.log("ERROR", err)

@@ -88,3 +88,53 @@ let query_options = {
   ]
 }
 ```
+
+
+To extract images from Wordpress 
+
+```
+<?php
+/**
+ * Get all attachment from post id
+ * Create this file into wordpress root directory as debug.php.
+ * To use it : http://<url>/debug.php?post_id=<POST_ID>
+ */
+
+define('WP_USE_THEMES', false);
+
+/** Loads the WordPress Environment and Template */
+require( dirname( __FILE__ ) . '/wp-blog-header.php' );
+
+/**
+* DEBUG PAGE
+*/ 
+
+$post_id = -1;
+if (isset($_GET['post_id']) && !empty($_GET['post_id'])) {
+  $post_id = $_GET['post_id'];
+}
+
+$attachments = get_children(array(
+  'post_parent' => $post_id,
+  'post_status' => 'inherit',
+  'post_type' => 'attachment',
+  'post_mime_type' => 'image',
+  'order' => 'ASC',
+  'orderby' => 'menu_order ID'
+));
+
+
+$output = [];
+$index = 0;
+// parse attachments
+foreach ($attachments as $att_id => $attachment) {
+  // _wp_attached_file property
+  array_push($output, [
+    "image_missing_in_wp_$index" => $attachment->ID,
+    // "image_missing_in_wp_$index" => get_post_meta($attachment->ID, '_wp_attached_file', true)
+  ]);
+  $index++;
+}
+
+echo json_encode( $output );
+```

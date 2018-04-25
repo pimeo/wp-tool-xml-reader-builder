@@ -4,6 +4,7 @@ const fsExt = require("fs-extra")
 const path = require("path")
 const when = require("when")
 const chalk = require("chalk")
+const request = require("request")
 
 module.exports = {
   medias: [],
@@ -47,6 +48,7 @@ module.exports = {
 
     // extract filename
     let output_filename = path.parse(media_path).base
+
     // destination path
     let dest_path = path.join(
       process.cwd(),
@@ -73,7 +75,6 @@ module.exports = {
     return when.promise((resolve, reject) => {
       let media = this.detect_media_from_item(item, meta_key_id)
       if (!media) return resolve()
-
       // copy file if possible
       return this.copy_file_from_item(
         item,
@@ -83,6 +84,27 @@ module.exports = {
         resolve,
         reject
       )
+    })
+  },
+
+  copy_media_from_attached_post_item(item, options) {
+    return when.promise( (resolve, reject) => {
+      let url = `http://oldjeandousset.local/debug.php?post_id=${item.post_id}`
+      request( url, (error, response, body) => {
+        
+        // promise maion process
+        when
+          .reduce(JSON.parse( body ), (origin, media) => {
+            // get fetched media key
+            let key = Object.keys(media)[0]
+            // concat fetched media with current item
+            item[`meta_key/${key}`] = media[key]
+            // copy file
+            return this.copy_media_for_item(item, key, options)
+          }, [])
+          .then(resolve)
+          .catch(reject)
+      })
     })
   }
 }

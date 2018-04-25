@@ -7,23 +7,20 @@
   "scripts": {
     "start": "node index.js",
     "build": "node build.js",
-
-    
     "reader:testimonial": "npm run start -- --post-type testimonial",
     "builder:testimonial": "npm run build -- --post-type testimonial",
     "copy:medias:testimonial": "node copy-medias/testimonial.js",
-  
     "reader:jewelry": "npm run start -- --post-type jewelry",
     "builder:jewelry": "npm run build -- --post-type jewelry",
     "copy:medias:jewelry": "node copy-medias/jewelry.js",
-
     "reader:custom-ring": "npm run start -- --post-type custom-ring",
     "builder:custom-ring": "npm run build -- --post-type custom-ring",
     "copy:medias:custom-ring": "node copy-medias/custom-ring.js",
-
+    "reader:diamond": "npm run start -- --post-type diamond",
+    "builder:diamond": "npm run build -- --post-type diamond",
+    "copy:medias:diamond": "node copy-medias/diamond.js",
     "reader:media": "npm run start -- --post-type media",
     "builder:media": "npm run build -- --post-type media",
-    
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "MIT",
@@ -31,6 +28,7 @@
     "chalk": "^2.3.2",
     "commander": "^2.15.1",
     "fs-extra": "^5.0.0",
+    "request": "^2.85.0",
     "when": "^3.7.8",
     "xml2js": "^0.4.19"
   }

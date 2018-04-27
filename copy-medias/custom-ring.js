@@ -28,13 +28,27 @@ function copy_item_medias(origin, item) {
   return when.promise((resolve, reject) => {
     when
       .all([
+        // copy from extracted post_types/<post_type>.json file
+
         // helpers.copy_media_for_item(item, "custom_top_banner", options),
-        helpers.copy_media_for_item(item, "custom_top_banner", options),
-        helpers.copy_media_for_item(item, "custom_detail_images_0_custom_detail_image", options),
-        helpers.copy_media_for_item(item, "custom_detail_images_1_custom_detail_image", options),
-        helpers.copy_media_for_item(item, "custom_inspiration_image_left", options),
-        helpers.copy_media_for_item(item, "custom_inspiration_image_right", options),
-        helpers.copy_media_for_item(item, "inquiry_form_image", options),
+        // helpers.copy_media_for_item(item, "left_image", options),
+        // helpers.copy_media_for_item(item, "bottom_image", options),
+        // helpers.copy_media_for_item(item, "right_image", options),
+        // helpers.copy_media_for_item(item, "right_image", options),
+        // helpers.copy_media_for_item(item, "grid_image_for_related", options),
+        // helpers.copy_media_for_item(item, "social_media_override", options),
+        // helpers.copy_media_for_item(item, "grid_images_0_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_1_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_2_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_3_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_4_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_5_image", options),
+        // helpers.copy_media_for_item(item, "grid_images_6_image", options),
+        // helpers.copy_media_for_item(item, "_thumbnail_id", options),
+
+        // copy from http://oldjeandousset.local/debug?post={$item->ID}
+        
+        // helpers.copy_media_from_attached_post_item( item, options )
       ])
       .then(() => {
         options.count_items++

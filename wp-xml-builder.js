@@ -33,7 +33,18 @@ class WPXMLBuilder {
       "wp:meta_key": [key],
       "wp:meta_value": [value]
     })
-    return this
+  }
+
+  get_attribute_for_item( item, key ) {
+    return item[key][0] || null
+  }
+
+  get_meta_key_for_item(item, key) {
+    return (
+      item["wp:postmeta"].map(i => {
+        return i[key]
+      })[0] || null
+    )
   }
 
   update_meta_key_for_item(item, key, value) {
@@ -42,7 +53,12 @@ class WPXMLBuilder {
         meta_key["wp:meta_value"] = [value]
       }
     })
-    return this
+  }
+
+  update_attribute_for_item( item, key, value ) {
+    if (item.hasOwnProperty(key)) {
+      item[key] = [value]
+    }
   }
 
   replace_meta_key_for_item(item, key, search, replaced_value) {
@@ -53,7 +69,6 @@ class WPXMLBuilder {
         meta_key["wp:meta_value"] = [value]
       }
     })
-    return this
   }
 
   remove_meta_key_for_item(item, key) {
@@ -98,16 +113,16 @@ class WPXMLBuilder {
     return this
   }
 
-  update_meta_key_key(oldKey, newKey) {
+  update_meta_key_key(old_key, new_key) {
     this.contents.rss.channel[0].item.forEach(item => {
       item["wp:postmeta"].forEach((meta_key, meta_index) => {
-        if (meta_key["wp:meta_key"].indexOf(oldKey) !== -1) {
+        if (meta_key["wp:meta_key"].indexOf(old_key) !== -1) {
           // 1. store value
           let value = meta_key["wp:meta_value"][0]
           // 2. create new entry
-          this.add_meta_key_for_item(item, newKey, value)
+          this.add_meta_key_for_item(item, new_key, value)
           // 3. remove old key
-          this.remove_meta_key_for_item(item, oldKey)
+          this.remove_meta_key_for_item(item, old_key)
         }
       })
     })
@@ -145,11 +160,11 @@ class WPXMLBuilder {
     return this
   }
 
-  update_acf_meta_key_key(oldKey, newKey) {
+  update_acf_meta_key_key(old_key, new_key) {
     // update value key
-    this.update_meta_key_key(oldKey, newKey)
+    this.update_meta_key_key(old_key, new_key)
     // update field id key
-    this.update_meta_key_key(`_${oldKey}`, `_${newKey}`)
+    this.update_meta_key_key(`_${old_key}`, `_${new_key}`)
     return this
   }
 
@@ -164,9 +179,7 @@ class WPXMLBuilder {
 
   update_attribute(key, value) {
     this.contents.rss.channel[0].item.forEach(item => {
-      if (item.hasOwnProperty(key)) {
-        item[key] = [value]
-      }
+      this.update_attribute_for_item( item, key, value )
     })
     return this
   }
@@ -184,6 +197,17 @@ class WPXMLBuilder {
         }
       }
     })
+    return this
+  }
+
+  copy_value_to_key(from, to) {
+    // get from_type key value and set to to_type key value.
+    // dynamic method to inject datas
+    this.contents.rss.channel[0].item.forEach(item => {
+      let value = this[`get_${from.type}_for_item`]( item, from.key )
+      this[`update_${to.type}_for_item`](item, to.key, value)
+    })
+
     return this
   }
 

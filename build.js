@@ -15,7 +15,14 @@ if (ARGV.postType) {
   try {
     configuration = require(`./post-types/${ARGV.postType}`)
   } catch (err) {
-    console.log(chalk.red(`Post Type "${ARGV.postType}" configuration file doesn't exists in post-type directory`), "\n")
+    console.log(
+      chalk.red(
+        `Post Type "${
+          ARGV.postType
+        }" configuration file doesn't exists in post-type directory`
+      ),
+      "\n"
+    )
   }
 }
 
@@ -31,7 +38,10 @@ reader.query(configuration.builder_query_options).then(response => {
   console.log(chalk.grey(`*********`))
   console.log(chalk.grey("Query Options:"))
   console.log(chalk.grey(`*********`), "\n")
-  console.log(chalk.grey(JSON.stringify(configuration.builder_query_options, null, 2)), "\n")
+  console.log(
+    chalk.grey(JSON.stringify(configuration.builder_query_options, null, 2)),
+    "\n"
+  )
 
   console.log(chalk.green(`*********`))
   console.log(chalk.green(`Response: (${response.length} items)`))
@@ -41,13 +51,16 @@ reader.query(configuration.builder_query_options).then(response => {
   let builder = new WPXMLBuilder()
 
   // set contents to builder
-  builder.set_contents( reader.mutable_contents )
+  builder.set_contents(reader.mutable_contents)
   // before build hook
-  builder = configuration.before_build( builder )
+  if (typeof configuration.before_build === "function") {
+    builder = configuration.before_build(builder)
+  }
 
   // build result orignal contents in a xml file following default import structure
-  builder.build({ output_filename: configuration.output_filename })
-  .then(response => {
-    console.log("XML file saved")
-  })
+  builder
+    .build({ output_filename: configuration.output_filename })
+    .then(response => {
+      console.log("XML file saved")
+    })
 })

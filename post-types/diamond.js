@@ -19,6 +19,7 @@ module.exports = {
   // [BUILDER] query options
   // required and must be attributes to parse all contents
   builder_query_options: {
+    write_response_logs: true,
     attributes: [
       "post_id",
       "meta_key/video_still_image",

@@ -1,26 +1,35 @@
 {
   "name": "wp-xml-reader",
-  "version": "0.0.1",
-  "description": "WP XML Reader",
+  "version": "0.0.2",
+  "description": "WP XML import file Reader/Builder",
   "author": "Bertrand Souriau",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "build": "node build.js",
+    
     "reader:testimonial": "npm run start -- --post-type testimonial",
     "builder:testimonial": "npm run build -- --post-type testimonial",
     "copy:medias:testimonial": "node copy-medias/testimonial.js",
     "reader:jewelry": "npm run start -- --post-type jewelry",
     "builder:jewelry": "npm run build -- --post-type jewelry",
     "copy:medias:jewelry": "node copy-medias/jewelry.js",
+    
     "reader:custom-ring": "npm run start -- --post-type custom-ring",
     "builder:custom-ring": "npm run build -- --post-type custom-ring",
     "copy:medias:custom-ring": "node copy-medias/custom-ring.js",
+    
     "reader:diamond": "npm run start -- --post-type diamond",
     "builder:diamond": "npm run build -- --post-type diamond",
     "copy:medias:diamond": "node copy-medias/diamond.js",
+
+    "reader:post": "npm run start -- --post-type post",
+    "builder:post": "npm run build -- --post-type post",
+    "copy:medias:post": "node copy-medias/post.js",
+    
     "reader:media": "npm run start -- --post-type media",
     "builder:media": "npm run build -- --post-type media",
+    
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "MIT",

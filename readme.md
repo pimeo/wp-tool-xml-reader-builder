@@ -1,98 +1,65 @@
-## WP XML READER
-
-Last update: 03/27/2018
+## WP XML READER AND BUILDER
+Created: 03/20/2018
+Last update: 10/02/2018
 Version: 0.0.1
+Description: Can parse a wordpress xml import file and format it into a json file. Can filter by attributes and execute queries with advanced conditions. Can generate a compatible custom wordpress xml import file from with advanced and flexibles settings.
 
 ## Copyright and license
 Code and documentation released under the MIT license.
 
-```javascript
-let query_options = {
-  // row_index: 0,
-  conditions: [
-    // attribute condition #1 : search by attribute key id and atribute key value
-    {
-      name: "status",
-      value: "draft",
-      attributes: ["post_name"]
-    },
-    // {
-    //   value: "Haley",
-      // attributes: [
-    //     "title",
-    //     "post_name",
-    //     "category/nicename",
-    //     "category/collection_type"
-    //   ]
-    // }
-    // category condition #1 : search by meta key id and meta key value
-    // {
-    //   name: "category/title",
-    //   value: "4 Carats",
-    //   attributes: ["title", "category"]
-    // },
-    // category condition #2 : search by meta key id and meta key value
-    // {
-    //   name: "category/domain",
-    //   value: "metal",
-    //   attributes: ["title", "category/nicename"]
-    // },
-    // category condition #3 : search by meta key id and meta key value
-    // {
-    //   name: "category/nicename",
-    //   value: "platinum-white-gold",
-    //   attributes: ["title", "category/metal/nicename"]
-    // }
-    // meta_key condition #1 : search by meta key id and meta key value
-    // {
-    //   name: "meta_key/_yoast_wpseo_focuskw",
-    //   value: "Chelsea Band",
-    //   attributes: [
-    //     "title",
-    //     "meta_key/_yoast_wpseo_focuskw",
-    //     "meta_key/_yoast_wpseo_linkdex"
-    //   ]
-    // }
-    // meta_key condition #1 : search by attribute key id and atribute key value
-    // {
-    //   name: "meta_key",
-    //   value: "grid_images_per_design",
-      // attributes: [
-        // "title",
-        // "post_id",
-        // "post_name",
-        // "category/collection-type",
-        // "status",
-        // "post_name"
-      // ]
-    // }
-  ],
-  // attribute : attribute mappings item or items if no conditions applied
-  attributes: [
-    // "title",
-    // "post_id",
-    // "post_name",
-    // "category/collection_type/nicename",
-    // "status",
-    // "title",
-    //   "post_name",
-    //   "status",
-    //   "post_id",
-    // "meta_key/_yoast_wpseo_metadesc",
-    // "meta_key/grid_images_per_design",
-    // "meta_key/grid_images_per_design|unserialize",
-    // "meta_key/all_tagged_images_meta|unserialize",
-    // "meta_key/all_tagged_images_meta",
-    // "meta_key/_yoast_wpseo_metadesc",
-    // "category/metal/nicename",
-  ]
-}
+
+## Installation
+
+```sh
+git clone https://pimeo@bitbucket.org/pimeo/wp-tool-xml-reader.git
+```
+
+```sh
+npm i
 ```
 
 
-To extract images from Wordpress 
+## Reader
 
-```
+A reader lets you to parse the content of a xml file and render it directly into the terminal. 
+
+You can create some custom queries and render only attributes you want to display at screen.
+
+### How to:
+
+- Create a new post type configuration file into `post-types` directory. Please refer to current files located to `post-types` to create your own configuration file.
+- Create a custom npm command into package.json `"reader:<post-type-slug>": "npm run start -- --post-type <post-type-slug>"` if you have to used it often else call directly via `npm run start -- --post-type <post-type-slug>` to read a post type import xml file.
+
+
+## Create a builder
+
+- A builder lets you to create a new xml file from a previous xml file. It is useful in the case of you want to add/update/delete/clone keys tags or/and attributes properties.
+- A builder needs to use a reader to parse the content before generating a new configuration. 
+
+- Create a new post type configuration file into `post-types` directory. Please refer to current files located to `post-types` to create your own configuration file.
+- Create a custom npm command into package.json `"reader:<post-type-slug>": "npm run start -- --post-type <post-type-slug>"` if you have to used it often else call directly via `npm run start -- --post-type <post-type-slug>` to read a post type import xml file.
+
+
+## Note
+
+- All configurations to setup a reader and/or a builder of a `post-type-slug` are located to `post-types/<post-type-slug>`.
+- In the case of you want to extract only some datas to generate a new configuration file, it is recommended to setup the `reader` objet to speed up the process handler.
+
+
+## Example of a post type configuration file
+
+Examples at `docs` directory.
+
+
+## Copy medias 
+
+You can also create custom script to copy all medias from a custom post type directly into a `output` directory.
+
+@TODO create documentation
+
+### Tip: How To extract images from Wordpress
+
+```php
 <?php
 /**
  * Get all attachment from post id

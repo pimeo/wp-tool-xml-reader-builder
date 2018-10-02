@@ -28,7 +28,8 @@ function copy_item_medias(origin, item) {
   return when.promise((resolve, reject) => {
     when
       .all([
-        // helpers.copy_media_for_item(item, "custom_top_banner", options),
+        // copy from http://oldjeandousset.local/debug?post={$item->ID}
+        helpers.copy_media_from_attached_post_item( item, options )
       ])
       .then(() => {
         options.count_items++

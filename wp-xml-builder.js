@@ -35,7 +35,7 @@ class WPXMLBuilder {
     })
   }
 
-  get_attribute_for_item( item, key ) {
+  get_attribute_for_item(item, key) {
     return item[key][0] || null
   }
 
@@ -55,7 +55,7 @@ class WPXMLBuilder {
     })
   }
 
-  update_attribute_for_item( item, key, value ) {
+  update_attribute_for_item(item, key, value) {
     if (item.hasOwnProperty(key)) {
       item[key] = [value]
     }
@@ -179,7 +179,7 @@ class WPXMLBuilder {
 
   update_attribute(key, value) {
     this.contents.rss.channel[0].item.forEach(item => {
-      this.update_attribute_for_item( item, key, value )
+      this.update_attribute_for_item(item, key, value)
     })
     return this
   }
@@ -204,7 +204,7 @@ class WPXMLBuilder {
     // get from_type key value and set to to_type key value.
     // dynamic method to inject datas
     this.contents.rss.channel[0].item.forEach(item => {
-      let value = this[`get_${from.type}_for_item`]( item, from.key )
+      let value = this[`get_${from.type}_for_item`](item, from.key)
       this[`update_${to.type}_for_item`](item, to.key, value)
     })
 

@@ -1,8 +1,8 @@
 ## WP XML READER AND BUILDER
-Created: 03/20/2018
-Last update: 10/02/2018
-Version: 0.0.1
-Description: Can parse a wordpress xml import file and format it into a json file. Can filter by attributes and execute queries with advanced conditions. Can generate a compatible custom wordpress xml import file from with advanced and flexibles settings.
+- Created: 03/20/2018
+- Last update: 10/02/2018
+- Version: 0.0.2
+- Description: Can parse a wordpress xml import file and format it into a json file. Can filter by attributes and execute queries with advanced conditions. Can generate a compatible custom wordpress xml import file from with advanced and flexibles settings.
 
 ## Copyright and license
 Code and documentation released under the MIT license.

@@ -53,7 +53,7 @@ module.exports = {
   },
 
   // get wp:meta_key value of wp:postmeta array or object
-  get_meta_key_value_from_key(item, key) {
+  get_meta_key_value_from_key(item, key, options = {}) {
     if (!key || !item) return null
 
     // use only attribute that we need for this method.
@@ -92,9 +92,19 @@ module.exports = {
   },
 
   // get value of wp:<atttribute>
-  get_attribute_value_from_key(item, key) {
+  get_attribute_value_from_key(item, key, options = {}) {
     if (!key || !item) return null
     let result = null
+
+    // initially it is a reader tool for wordpress so every
+    // tags that are not expected are prefixed by word "wp:".
+    // You can override the attribute_exeception object to ignore some attributes
+    // @TODO: make the reverse process and tell to the script that it is a wp xml
+    if( options.hasOwnProperty('attributes_exceptions') && Array.isArray(options.attributes_exceptions) ) {
+      this.attributes_exceptions = (this.attributes_exceptions || []).concat(options.attributes_exceptions)
+      // make sure that every entries will be uniq
+      this.attributes_exceptions = this.attributes_exceptions.filter((v, i, a) => a.indexOf(v) === i)
+    }
 
     if (
       this.attributes_exceptions.indexOf(key) == -1 &&
@@ -102,6 +112,7 @@ module.exports = {
     ) {
       key = `wp:${key}`
     }
+
 
     if (Array.isArray(item)) {
       item.forEach(attribute => {
@@ -129,7 +140,7 @@ module.exports = {
   // category/<category_domain>/title
   // category/<category_domain>/nicename
   // category/<category_domain>/domain
-  get_category_value_from_key(item, key) {
+  get_category_value_from_key(item, key, options = {}) {
     if (!key || !item) return null
     let result = []
     
@@ -160,8 +171,12 @@ module.exports = {
             }
           }
         } else {
-          // get category title 
-          result.push(this.string_value_from_array_if_possible(category["_"])) 
+          if (Array.isArray(category)) {
+            // get category title 
+            result.push(this.string_value_from_array_if_possible(category["_"])) 
+          } else {
+            result.push(category)
+          }
         }
       })
     }
@@ -175,7 +190,7 @@ module.exports = {
     if( condition.name.indexOf('/') > -1 ) {
       let key = condition.name.split('/').pop()
       // condition: get meta_key by key id and key value
-      value = this.get_meta_key_value_from_key(item, key) == condition.value ? item : null
+      value = this.get_meta_key_value_from_key(item, key, condition) == condition.value ? item : null
     } else {
       // condition: get meta_key by key id
       value = this.get_meta_key_value_from_key(item, condition.value) !== null ? item : null
@@ -187,7 +202,7 @@ module.exports = {
     // define operator
     condition.operator = condition.operator ? condition.operator : "equalsTo"
     // retrieve value of condition
-    let value = this.get_category_value_from_key(item, condition.name)
+    let value = this.get_category_value_from_key(item, condition.name, condition)
     
     if( condition.operator == "notEqualsTo" ) {
       return value.indexOf(condition.value) == -1 ? item : null  
@@ -201,7 +216,7 @@ module.exports = {
     // define operator
     condition.operator = condition.operator ? condition.operator : "equalsTo"
     // retrieve value of condition
-    let value = this.get_attribute_value_from_key(item, condition.name)
+    let value = this.get_attribute_value_from_key(item, condition.name, condition)
   
     if( condition.operator == "notEqualsTo" ) {
       return condition.value != value ? item : null

@@ -90,7 +90,8 @@ class WPXMLReader {
       const attribute_type = helpers.get_attribute_type_for_key(attribute)
       result[attribute] = helpers[`get_${attribute_type}_value_from_key`](
         item,
-        attribute
+        attribute,
+        options
       )
     })
     return result

@@ -87,9 +87,9 @@ module.exports = {
     })
   },
 
-  copy_media_from_attached_post_item(item, options) {
+  copy_media_from_attached_post_item(item, options, host) {
     return when.promise( (resolve, reject) => {
-      let url = `http://oldjeandousset.local/debug.php?post_id=${item.post_id}`
+      let url = `${host}/debug.php?post_id=${item.post_id}`
       request( url, (error, response, body) => {
         
         // promise maion process

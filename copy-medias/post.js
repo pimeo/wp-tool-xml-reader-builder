@@ -14,7 +14,7 @@ const items = require("./../datas/output/posts.json")
 // settings
 const options = {
   source_dir: path.join(
-    "/Applications/MAMP/htdocs/old-jean-dousset/wp-content/uploads"
+    "/Applications/MAMP/htdocs/jean-dousset-wp/wp-content/uploads"
   ),
   output_dir: path.join("datas", "uploads", "posts-medias"),
   count_items: 0
@@ -28,8 +28,8 @@ function copy_item_medias(origin, item) {
   return when.promise((resolve, reject) => {
     when
       .all([
-        // copy from http://oldjeandousset.local/debug?post={$item->ID}
-        helpers.copy_media_from_attached_post_item( item, options )
+        // copy from http://oldjeandousset.local/debug.php?post={$item->ID}
+        helpers.copy_media_from_attached_post_item( item, options, 'http://jeandousset.local' )
       ])
       .then(() => {
         options.count_items++

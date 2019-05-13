@@ -12,7 +12,7 @@ module.exports = {
      attributes: [
       "post_id",
       "post_name",
-      "meta_key/testimonial_info"
+      // "meta_key/testimonial_info"
      ]
   },
 

@@ -1,6 +1,6 @@
 module.exports = {
   // [COMMON] input path
-  input_path: "./datas/oldjeandousset/oldjeandousset.medias.2018-04-19.xml",
+  input_path: "./datas/medias/jeandousset.wordpress.2019-05-13.xml",
 
   // [COMMON] ouput file
   output_filename: "medias",

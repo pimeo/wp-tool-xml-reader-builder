@@ -40,11 +40,15 @@ class WPXMLBuilder {
   }
 
   get_meta_key_for_item(item, key) {
-    return (
-      item["wp:postmeta"].map(i => {
-        return i[key]
-      })[0] || null
-    )
+    let value = ''
+    for (let index = 0; index < item["wp:postmeta"].length; index++) {
+      const meta_key = item["wp:postmeta"][index];
+      if (meta_key["wp:meta_key"].indexOf(key) !== -1) {
+        value = meta_key["wp:meta_value"][0]
+        break;
+      }      
+    }
+    return value
   }
 
   update_meta_key_for_item(item, key, value) {
@@ -216,6 +220,22 @@ class WPXMLBuilder {
       if (item.hasOwnProperty(key)) {
         delete item[key]
       }
+    })
+    return this
+  }
+
+  // categories
+  add_category(key, value, domain, nicename) {
+    this.contents.rss.channel[0].item.forEach(item => {
+      item.category = item.category || []
+      let category = {
+        _: value,
+        '$': {
+          domain: domain,
+          nicename: nicename
+        }
+      }
+      item.category.push(category)
     })
     return this
   }

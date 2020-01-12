@@ -1,6 +1,6 @@
 {
   "name": "wp-xml-reader",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "WP XML import file Reader/Builder",
   "author": "Pimeo (bertrand.souriau@gmail.com)",
   "main": "index.js",

@@ -2,7 +2,7 @@
   "name": "wp-xml-reader",
   "version": "0.0.2",
   "description": "WP XML import file Reader/Builder",
-  "author": "Bertrand Souriau",
+  "author": "Pimeo (bertrand.souriau@gmail.com)",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

@@ -202,8 +202,7 @@ module.exports = {
     // define operator
     condition.operator = condition.operator ? condition.operator : "equalsTo"
     // retrieve value of condition
-    let value = this.get_category_value_from_key(item, condition.name, condition)
-    
+    let value = this.get_category_value_from_key(item, condition.name, condition)    
     if( condition.operator == "notEqualsTo" ) {
       return value.indexOf(condition.value) == -1 ? item : null  
     }
@@ -217,11 +216,23 @@ module.exports = {
     condition.operator = condition.operator ? condition.operator : "equalsTo"
     // retrieve value of condition
     let value = this.get_attribute_value_from_key(item, condition.name, condition)
-  
+    
+    // authorize condition value to be a function
+    let condition_value = typeof condition.value === "function" ? condition.value() : condition.value
+
+    if (Array.isArray(condition_value)) {
+      if( condition.operator == "notEqualsTo" ) {
+        return condition_value.indexOf(value) == -1 ? item : null  
+      } else {
+        return condition_value.indexOf(value) > -1 ? item : null
+      }
+    }
+    
+    // consider that condition value is another cast type
     if( condition.operator == "notEqualsTo" ) {
-      return condition.value != value ? item : null
+      return condition_value != value ? item : null
     }
     // default operator "equalsTo" condition
-    return condition.value == value ? item : null
+    return condition_value == value ? item : null
   },
 }

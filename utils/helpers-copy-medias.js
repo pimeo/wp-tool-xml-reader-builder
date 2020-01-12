@@ -8,7 +8,10 @@ const request = require("request")
 
 module.exports = {
   medias: [],
-
+  /**
+   * Push medias object to the helpers (cache)
+   * @param {Array} medias 
+   */
   set_medias(medias) {
     this.medias = medias
   },
